@@ -6,12 +6,12 @@ import asyncio
 # Define a model client. You can use other model client that implements
 # the `ChatCompletionClient` interface.
 model_client = AzureOpenAIChatCompletionClient(
-    azure_deployment="gpt-4o",
-    model="gpt-4o",
-    api_version="2025-01-01-preview",
-    azure_endpoint="https://westus.api.cognitive.microsoft.com/",
+    azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+    model=os.getenv("AZURE_OPENAI_MODEL_NAME"),
+    api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
     #azure_ad_token_provider=token_provider,  # Optional if you choose key-based authentication.
-    api_key="06fa986825f54cd0a4cb4fe4669a8db3", # For key-based authentication.
+    api_key=os.getenv("AZURE_API_KEY") # For key-based authentication.
 )
 
 

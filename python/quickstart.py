@@ -7,6 +7,11 @@ import asyncio
 import logging
 from autogen_core import EVENT_LOGGER_NAME
 
+import os
+from dotenv import load_dotenv  
+
+load_dotenv()
+
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(EVENT_LOGGER_NAME)
 logger.addHandler(logging.StreamHandler())
@@ -20,12 +25,12 @@ logger.setLevel(logging.DEBUG)
 # )
 
 az_model_client = AzureOpenAIChatCompletionClient(
-    azure_deployment="gpt-4o",
-    model="gpt-4o-2024-11-20",
-    api_version="2025-01-01-preview",
-    azure_endpoint="https://westus.api.cognitive.microsoft.com/",
+    azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+    model=os.getenv("AZURE_OPENAI_MODEL_NAME"),
+    api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+    azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
     #azure_ad_token_provider=token_provider,  # Optional if you choose key-based authentication.
-    api_key="06fa986825f54cd0a4cb4fe4669a8db3", # For key-based authentication.
+    api_key=os.getenv("AZURE_API_KEY") # For key-based authentication.
 )
 
 async def main():

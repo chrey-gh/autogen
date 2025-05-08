@@ -4,6 +4,10 @@ from autogen_ext.models.openai import AzureOpenAIChatCompletionClient
 from autogen_ext.tools.mcp import McpWorkbench, StdioServerParams
 
 import asyncio
+import os
+from dotenv import load_dotenv  
+
+load_dotenv()
 
 # Get the fetch tool from mcp-server-fetch.
 fetch_mcp_server = StdioServerParams(command="uvx", args=["mcp-server-fetch"])
@@ -13,12 +17,12 @@ async def main():
     async with McpWorkbench(fetch_mcp_server) as workbench:  # type: ignore
         # Create an agent that can use the fetch tool.
         model_client = AzureOpenAIChatCompletionClient(
-            azure_deployment="gpt-4o",
-            model="gpt-4o-2024-11-20",
-            api_version="2025-01-01-preview",
-            azure_endpoint="https://westus.api.cognitive.microsoft.com/",
+            azure_deployment=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME"),
+            model=os.getenv("AZURE_OPENAI_MODEL_NAME"),
+            api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
+            azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
             #azure_ad_token_provider=token_provider,  # Optional if you choose key-based authentication.
-            api_key="06fa986825f54cd0a4cb4fe4669a8db3", # For key-based authentication.
+            api_key=os.getenv("AZURE_API_KEY") # For key-based authentication.
         )
         fetch_agent = AssistantAgent(
             name="fetcher", model_client=model_client, workbench=workbench, reflect_on_tool_use=True
